@@ -1,0 +1,16 @@
+{
+  "name": "launchpad-bot",
+  "version": "1.0.0",
+  "description": "LaunchPad Discord Bot",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "register": "node register-commands.js"
+  },
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "node-cron": "^3.0.3",
+    "axios": "^1.6.7",
+    "dotenv": "^16.4.1"
+  }
+}
