@@ -81,55 +81,70 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
   // ── /checkin ──────────────────────────────────────────────────────────────
   if (interaction.isChatInputCommand() && interaction.commandName === 'checkin') {
-    const week = getCurrentWeek();
-    const questions = getWeekQuestions(week);
+    try {
+      const week = getCurrentWeek();
+      const questions = getWeekQuestions(week);
 
-    const modal = new ModalBuilder()
-      .setCustomId(`checkin_week_${week}`)
-      .setTitle(`Week ${week} Check-in`);
+      const modal = new ModalBuilder()
+        .setCustomId(`checkin_week_${week}`)
+        .setTitle(`Week ${week} Check-in`);
 
-    questions.forEach((q, i) => {
-      const input = new TextInputBuilder()
-        .setCustomId(`q${i + 1}`)
-        .setLabel(q.label)
-        .setPlaceholder(q.placeholder)
-        .setStyle(TextInputStyle.Paragraph)
-        .setRequired(true);
-      modal.addComponents(new ActionRowBuilder().addComponents(input));
-    });
+      questions.forEach((q, i) => {
+        const input = new TextInputBuilder()
+          .setCustomId(`q${i + 1}`)
+          .setLabel(q.label)
+          .setPlaceholder(q.placeholder)
+          .setStyle(TextInputStyle.Paragraph)
+          .setRequired(true);
+        modal.addComponents(new ActionRowBuilder().addComponents(input));
+      });
 
-    await interaction.showModal(modal);
+      await interaction.showModal(modal);
+    } catch (err) {
+      console.error('Error in /checkin:', err);
+      if (!interaction.replied) {
+        await interaction.reply({ content: 'Something went wrong opening the check-in. Try again!', ephemeral: true });
+      }
+    }
   }
 
   // ── /win ──────────────────────────────────────────────────────────────────
   if (interaction.isChatInputCommand() && interaction.commandName === 'win') {
-    const modal = new ModalBuilder()
-      .setCustomId('win_modal')
-      .setTitle('Log a Win 🔥');
+    try {
+      const modal = new ModalBuilder()
+        .setCustomId('win_modal')
+        .setTitle('Log a Win 🔥');
 
-    modal.addComponents(
-      new ActionRowBuilder().addComponents(
-        new TextInputBuilder()
-          .setCustomId('win_text')
-          .setLabel("What's the win?")
-          .setPlaceholder('e.g. First client signed!')
-          .setStyle(TextInputStyle.Short)
-          .setRequired(true)
-      ),
-      new ActionRowBuilder().addComponents(
-        new TextInputBuilder()
-          .setCustomId('win_detail')
-          .setLabel('Tell us more (optional)')
-          .setStyle(TextInputStyle.Paragraph)
-          .setRequired(false)
-      )
-    );
+      modal.addComponents(
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId('win_text')
+            .setLabel("What's the win?")
+            .setPlaceholder('e.g. First client signed!')
+            .setStyle(TextInputStyle.Short)
+            .setRequired(true)
+        ),
+        new ActionRowBuilder().addComponents(
+          new TextInputBuilder()
+            .setCustomId('win_detail')
+            .setLabel('Tell us more (optional)')
+            .setStyle(TextInputStyle.Paragraph)
+            .setRequired(false)
+        )
+      );
 
-    await interaction.showModal(modal);
+      await interaction.showModal(modal);
+    } catch (err) {
+      console.error('Error in /win:', err);
+      if (!interaction.replied) {
+        await interaction.reply({ content: 'Something went wrong. Try again!', ephemeral: true });
+      }
+    }
   }
 
   // ── /logoutreach ─────────────────────────────────────────────────────────
   if (interaction.isChatInputCommand() && interaction.commandName === 'logoutreach') {
+    try {
     const modal = new ModalBuilder()
       .setCustomId('outreach_modal')
       .setTitle('Log Your Outreach');
@@ -162,6 +177,12 @@ client.on(Events.InteractionCreate, async (interaction) => {
     );
 
     await interaction.showModal(modal);
+    } catch (err) {
+      console.error('Error in /logoutreach:', err);
+      if (!interaction.replied) {
+        await interaction.reply({ content: 'Something went wrong. Try again!', ephemeral: true });
+      }
+    }
   }
 
   // ── Modal submissions ─────────────────────────────────────────────────────
